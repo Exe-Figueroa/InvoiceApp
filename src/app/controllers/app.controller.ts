@@ -1,4 +1,9 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 
 @Controller()
-export class AppController {}
+export class AppController {
+  @Get()
+  helloWorld(){
+    return 'welcome to my server in NestJS 🚀'
+  }
+}
