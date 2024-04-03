@@ -34,7 +34,7 @@ export class InvoicesController {
   async create(@Body() body: CreateInvoiceDto) {
     const response = await this.invoicesService.create(body);
     if (response._id) {
-      await this.emailService.sendEmail(response); 
+      this.emailService.sendEmail(response); 
     }
     return response;
   }
