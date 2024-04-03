@@ -33,10 +33,8 @@ export class InvoicesController {
   @Post()
   async create(@Body() body: CreateInvoiceDto) {
     const response = await this.invoicesService.create(body);
-    console.log({response});
-    
     if (response._id) {
-      this.emailService.sendEmail(response); 
+      await this.emailService.sendEmail(response); 
     }
     return response;
   }
