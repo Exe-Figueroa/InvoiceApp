@@ -27,6 +27,7 @@ export class User extends Document {
 
   @Prop({ required: false })
   country: string;
+
 }
 
 
