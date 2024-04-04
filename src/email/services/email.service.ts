@@ -12,9 +12,13 @@ export class EmailService {
   constructor() {
     this.transporter = nodemailer.createTransport({
       service: 'Gmail',
+      secure: false,
       auth: {
-        user: process.env.USERNAME_EMAIL, // Correo del usuario 
-        pass: process.env.PASSWORD_EMAIL, // Clave de acceso para el email
+        user: process.env.USERNAME_EMAIL,
+        pass: process.env.PASSWORD_EMAIL,
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     });
   }
