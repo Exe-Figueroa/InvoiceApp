@@ -16,7 +16,7 @@ export class InvoicesService {
     ) { }
 
   async findAll(limit?: number, offset?: number) {
-    const invoiceList = await this.invoiceModel.find().limit(limit).skip(offset).exec();
+    const invoiceList = await this.invoiceModel.find().sort({createdAt: 'asc'}).limit(limit).skip(offset).exec();
     return invoiceList;
   }
 
@@ -35,8 +35,6 @@ export class InvoicesService {
   }
 
   async create(payload: CreateInvoiceDto) {
-    console.log('Se está tratando de crear algo', payload);
-    
     const response = await this.invoiceModel.create({
       id: generarId(),
       createdAt: new Date(),
@@ -48,8 +46,6 @@ export class InvoicesService {
   }
 
   async createDraft(payload: DraftInvoiceDto) {
-    console.log('Se está tratando de crear un draft', payload);
-    
     const response = await this.draftModel.create({
       id: generarId(),
       createdAt: new Date(),

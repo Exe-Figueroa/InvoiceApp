@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -24,7 +24,7 @@ export class ItemsService {
             }
             return itemToUpdate
         } catch (error) {
-            console.log({error});
+            throw new HttpException('ITEM NOT FOUND', 404);
         }
     }
     async create(payload: ItemDto) {

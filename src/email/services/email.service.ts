@@ -35,7 +35,6 @@ export class EmailService {
         subject,
         html,
       });
-      console.log('Invoice creado enviado');
     } catch (error) {
       console.error('Error al enviar el correo:', error);
       throw error;
@@ -53,9 +52,6 @@ export class EmailService {
         subject,
         html,
       });
-      console.log({client, id});
-      
-      console.log('Html template =>');
     } catch (error) {
       console.error('Error al enviar el correo:', error);
       throw error;

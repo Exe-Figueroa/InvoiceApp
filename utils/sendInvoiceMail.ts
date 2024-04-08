@@ -1,7 +1,7 @@
 import { Invoice } from "src/invoices/schema/invoice.schema";
 
 export const templateSendMail = (payload: Invoice): string => {
-  const { client, items, paymentDue, status, total, id, paymentTerms } = payload;
+  const { client, items, paymentDue, id, paymentTerms } = payload;
   return /*html*/`
   <!DOCTYPE html>
   <html lang="en">
@@ -72,24 +72,28 @@ export const templateSendMail = (payload: Invoice): string => {
       style="color: #888eb0a5; padding: 10px; width: fit-content; border-radius: 5px; border: solid 1px #373B53; display: flex; margin-bottom: 20px;"
       >To:  <p style="padding-left: 5px;">${client.clientName}</p> </div>
       <h2 style="display: flex; font-size: 14px; margin-bottom: 10px; font-weight: 400;">Invoice <p style="color: #7E88C3; padding-left: 5px;">#${id}</p></h2>
-      <h3 style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Detalle de la factura</h3>
-      <span style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Productos</span>
+      <h3 style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Invoice Details</h3>
+      <span style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Products</span>
       ${items.map(item => `
         <ul style="list-style: none; padding-left: 10px; line-height: 20px; margin-bottom: 20px; font-family: 'League Spartan', sans-serif;">
-          <li><span style="color: rgba(255, 255, 255, 0.7);">Nombre</span>:  ${item.name}</li>
-          <li><span style="color: rgba(255, 255, 255, 0.7);">Cantidad</span>:  ${item.quantity}</li>
-          <li><span style="color: rgba(255, 255, 255, 0.7);">Precio</span>:  ${item.price}</li>
-          <li><span style="color: rgba(255, 255, 255, 0.7);">Total</span>:  ${item.total}</li>
+          <li><span style="color: rgba(255, 255, 255, 0.7);">Name</span>:  ${item.name}</li>
+          <li><span style="color: rgba(255, 255, 255, 0.7);">Quantity</span>:  ${item.quantity}</li>
+          <li><span style="color: rgba(255, 255, 255, 0.7);">Price</span>:  $${item.price}</li>
+          <li><span style="color: rgba(255, 255, 255, 0.7);">Total</span>:  $${item.total}</li>
         </ul>`
   ).join('')}
-      <span style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Pago</span>
+      <span style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Payment</span>
       <div><span style="color: rgba(255, 255, 255, 0.7);">Payment due:</span> ${paymentDue}.</div>
       <div><span style="color: rgba(255, 255, 255, 0.7);">Payment Terms:</span> Net ${paymentTerms} days.</div>
 
       <div style="display: flex; width: 100%; justify-content: space-between; margin-bottom: 40px;">
         <p style="margin: auto 0">Total: $${items.reduce((acumulator, currentItem) => acumulator + currentItem.total, 0 )}</p>
-        <p style="margin-left: auto; background-color: rgba(255, 145, 0, 0.1); padding: 10px 20px; width: fit-content; border-radius: 6px; font-weight: bold; color: #FF8F00;">● Pendiente</p>
+        <p style="margin-left: auto; background-color: rgba(255, 145, 0, 0.1); padding: 10px 20px; width: fit-content; border-radius: 6px; font-weight: bold; color: #FF8F00;">● Pending</p>
       </div>
+      <p style="font-size: 1.1rem; margin-bottom: 40px;">We remain at your disposal for any other management you may require.</p>
+      <div 
+      style="color: #7d7e80; padding: 10px; width: fit-content; border-radius: 5px; border: solid 1px #7d7e80; display: flex; margin-bottom: 20px; margin-top: 20px;"
+      >Contact:  <p style="padding-left: 5px;">canteradocs@gmail.com</p> </div>
       <article style="margin-bottom: 20px; width: 100%; display: flex; border-top: 1px solid #373B53;">
         <img src="https://i.ibb.co/0rtsrnG/logo-Cantera.png" alt="" style="margin: 0 auto; width: 30%; margin-top: 40px;">
       </article>
@@ -100,7 +104,7 @@ export const templateSendMail = (payload: Invoice): string => {
   `;
 }
 export const paidInvoiceEmail = (payload: Invoice): string => {
-  const { client, id, items, status } = payload;
+  const { client, id, items } = payload;
   return /*html*/`
   <!DOCTYPE html>
   <html lang="en">
@@ -170,29 +174,32 @@ export const paidInvoiceEmail = (payload: Invoice): string => {
       <div 
       style="color: #888eb0a5; padding: 10px; width: fit-content; border-radius: 5px; border: solid 1px #373B53; display: flex; margin-bottom: 20px;"
       >To:  <p style="padding-left: 5px;">${client.clientName}</p> </div>
-      <article style="width: 50%; margin: 30px auto; background-color: #6440f4; padding: 40px 20px; border-radius: 10px;">
-        <h2 style="font-size: 1.5rem;">Felicidades!!</h2>
-        <p style="font-size: 1.1rem; line-height: 20px;">Hemos registrado el pago de la factura <span style="color: #7E88C3; padding-left: 5px;">#${id}</span>. Agradecemos su pronta gestión. </p>
+      <article style="width: 50%; margin: 30px auto; background-color: #6440f475; padding: 40px 20px; border-radius: 10px;">
+        <h2 style="font-size: 1.5rem;">Congratulations!!</h2>
+        <p style="font-size: 1.1rem; line-height: 20px;">We have recorded the payment of the invoice <span style="color: rgba(0,0,0, 0.72); padding-left: 5px;">#${id}</span>. We appreciate your prompt management. </p>
       </article>
-      <h3 style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Detalle de la factura</h3>
-      <span style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Productos</span>
+      <h3 style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Invoice Details</h3>
+      <span style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Products</span>
       ${items.map(item => `
         <ul style="list-style: none; padding-left: 10px; line-height: 20px; margin-bottom: 20px; font-family: 'League Spartan', sans-serif;">
-          <li><span style="color: rgba(255, 255, 255, 0.7);">Nombre</span>:  ${item.name}</li>
-          <li><span style="color: rgba(255, 255, 255, 0.7);">Cantidad</span>:  ${item.quantity}</li>
-          <li><span style="color: rgba(255, 255, 255, 0.7);">Precio</span>:  ${item.price}</li>
-          <li><span style="color: rgba(255, 255, 255, 0.7);">Total</span>:  ${item.total}</li>
+          <li><span style="color: rgba(255, 255, 255, 0.7);">Name</span>:  ${item.name}</li>
+          <li><span style="color: rgba(255, 255, 255, 0.7);">Quantity</span>:  ${item.quantity}</li>
+          <li><span style="color: rgba(255, 255, 255, 0.7);">Price</span>:  $${item.price}</li>
+          <li><span style="color: rgba(255, 255, 255, 0.7);">Total</span>:  $${item.total}</li>
         </ul>`
   ).join('')}
-      <span style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Pago</span>
+      <span style="font-size: 14px; margin-bottom: 10px; font-weight: 400;">Payment</span>
 
       <div style="display: flex; width: 100%; justify-content: space-between; margin-bottom: 40px;">
         <p style="margin: auto 0">Total: $${items.reduce((acumulator, currentItem) => acumulator + currentItem.total, 0 )}</p>
         <p style="margin-left: auto; background-color: rgba(51, 214, 159, 0.1)
-; padding: 10px 20px; width: fit-content; border-radius: 6px; font-weight: bold; color: #33D69F;">● Pagado</p>
+; padding: 10px 20px; width: fit-content; border-radius: 6px; font-weight: bold; color: #33D69F;">● Paid</p>
       </div>
 
-      <p style="font-size: 1.1rem; margin-bottom: 40px;">Quedamos a su disposición para cualquier otra gestión que requiera </p>
+      <p style="font-size: 1.1rem; margin-bottom: 40px;">We remain at your disposal for any other management you may require.</p>
+      <div 
+      style="color: #7d7e80; padding: 10px; width: fit-content; border-radius: 5px; border: solid 1px #7d7e80; display: flex; margin-bottom: 20px; margin-top: 20px;"
+      >Contact:  <p style="padding-left: 5px;">canteradocs@gmail.com</p> </div>
       <article style="margin-bottom: 20px; width: 100%; display: flex; border-top: 1px solid #373B53;">
         <img src="https://i.ibb.co/0rtsrnG/logo-Cantera.png" alt="" style="margin: 0 auto; width: 30%; margin-top: 40px;">
       </article>

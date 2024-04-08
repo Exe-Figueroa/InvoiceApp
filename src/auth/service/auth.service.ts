@@ -29,9 +29,9 @@ export class AuthService {
 
     const accessTokenPayload = { id: findUser._id, name: findUser.name };
     const accessToken = this.jwtService.sign(accessTokenPayload);
-
     const refreshTokenPayload = { id: findUser._id };
     const refreshToken = this.jwtService.sign(refreshTokenPayload, { expiresIn: '2h' }); 
+    const tokenExp = this.jwtService.decode(refreshToken)
     
     const data = {
       user: {
@@ -40,24 +40,44 @@ export class AuthService {
         city: findUser.city
       },
       accessToken,
-      refreshToken
+      refreshToken,
+      tokenExp 
     };
 
     return data;
   }
 
 
-  async refreshAccessToken(refreshToken: string) {
+  async refreshAccessToken(token: string) {
     try {
-      const decodedToken = this.jwtService.verify(refreshToken);
+      const decodedToken = this.jwtService.verify(token);
       const accessTokenPayload = { id: decodedToken.id };
       const accessToken = this.jwtService.sign(accessTokenPayload);
+      const refreshToken = this.jwtService.sign(accessTokenPayload, { expiresIn: '2h' });
+      const expiration = this.jwtService.decode(refreshToken)
 
-      return { accessToken };
+      return { accessToken: accessToken, expiration: expiration, refreshToken: refreshToken };
     } catch (error) {
       throw new HttpException('TOKEN_INCORRECT', 401);
     }
   }
 
+  // async validatedToken(token: string) {
+  //   try {
+  //     const tokenFirst = this.jwtService.verify(token);
+  //     if (tokenFirst.id) {
+  //       return true
+        
+  //     }else{
+  //       return false
+  //     }
+      
+  //   } catch (error) {
+  //     console.error(error)
+      
+  //   }
+    
+  // }
+  
 
 }
